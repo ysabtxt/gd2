@@ -1,0 +1,21 @@
+using UnityEngine;
+
+public class RespawnScript : MonoBehaviour
+{
+    Vector3 originalPosition;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        originalPosition = transform.position;
+    }
+
+    
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.collider.name == "SafetyNet")
+        {
+            transform.position = originalPosition;
+        } 
+    }
+}
