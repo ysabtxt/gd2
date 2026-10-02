@@ -1,0 +1,37 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class BulletForce : MonoBehaviour
+{
+    Rigidbody bullletRigid;
+    
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        bullletRigid = GetComponent<Rigidbody>();
+       // bullletRig.AddForce(Vector3.forward*2000); -> this has global direction
+        bullletRigid.AddRelativeForce(Vector3.forward * 2000);
+        //bullletRig.AddRelativeTorque(Vector3.forward * 2000);
+        Destroy(gameObject, 3); // aft5er 3s, buillets get destroyed
+
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+       
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+       /* if (collision.collider.name != "Stage")
+        {
+            GameObject obs = collision.collider.gameObject;
+            Destroy(obs);
+        }*/
+        Destroy(gameObject);
+
+    }
+}
