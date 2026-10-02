@@ -1,0 +1,29 @@
+using UnityEngine;
+
+public class TaggingScript : MonoBehaviour
+{
+    GameObject[] grpObjects;
+    float counter;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+       
+        /*foreach (GameObject obj in grpObjects)
+        {
+            Debug.Log(obj.name);
+        }*/
+        counter = 0;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        grpObjects = GameObject.FindGameObjectsWithTag("TX32"); //pag array
+        counter += Time.deltaTime;
+        if(counter >= 2 && grpObjects.Length > 0) //every 2 sec magdedestroy 
+        {
+            Destroy(grpObjects[0]);
+            counter = 0;    
+        }
+    }
+}
