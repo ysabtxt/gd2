@@ -1,0 +1,96 @@
+//add empty gameobject as game menu gui
+
+using UnityEngine;
+
+public class GameMenuScript : MonoBehaviour
+{
+    bool checkStart = false;
+    bool checkOp=false;
+    string Name = " ";
+    int diffIndex = 0;
+    int speedVal = 1;
+
+    string sName;
+    string sDiff;
+    int sSpeed;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+
+
+
+
+    private void OnGUI()
+    {
+        if (!checkStart)
+        {
+            GUI.Box(new Rect(Screen.width / 2 - 150, Screen.height / 2 - 75, 300, 150), "Main Menu");
+            if (GUI.Button(new Rect(Screen.width / 2 - 60, Screen.height / 2 - 25, 120, 30), "Start"))
+            {
+                checkStart = true;
+            }
+            if (GUI.Button(new Rect(Screen.width / 2 - 60, Screen.height / 2 + 10, 120, 30), "Option"))
+            {
+                checkStart = true;
+                checkOp = true;
+            }
+        }
+        else if (checkOp)
+        {
+            GUI.Box(new Rect(10, 10, 400, 300), "Option");
+            GUI.Label(new Rect(20, 40, 70, 30), "Name: ");
+            Name = GUI.TextField(new Rect(90, 40, 150, 30), Name);
+            GUI.Label(new Rect(20, 90, 100, 30), "Difficulty: ");
+            diffIndex = GUI.Toolbar(new Rect(50, 140, 200, 30), diffIndex, new string[] { "Easy", "Medium", "Hard" }, "Toggle"); // toolbar acts like radio button
+
+            GUI.Label(new Rect(20, 180, 100, 30), "Game Speed: ");
+            speedVal = (int)GUI.HorizontalSlider(new Rect(50, 225, 200, 30), speedVal, 1, 10);
+            GUI.Label(new Rect(260, 225, 100, 30), speedVal.ToString());
+
+            // when clicked, mapupunta parameters sa results screen
+            if (GUI.Button(new Rect(240, 255, 70, 30), "Ok"))
+            {
+                sName = Name;
+                string[] Diff = { "Easy", "Medium", "Hard" };
+                sDiff = Diff[diffIndex];
+                sSpeed = speedVal;
+
+                checkOp = false;
+                checkStart = false;
+            }
+            if (GUI.Button(new Rect(320, 255, 70, 30), "Cancel"))
+            {
+                Name = "";
+                diffIndex = 0;
+                speedVal = 1;
+
+                checkOp = false;
+                checkStart = false;
+
+                
+            }
+
+
+        }
+        else if (checkStart) // results
+        {
+            GUI.Box(new Rect(10, 10, 400, 200), "Results");
+            GUI.Label(new Rect(30, 50, 300, 30), "Name: " + sName);
+            GUI.Label(new Rect(30, 90, 300, 30), "Difficulty: " + sDiff);
+            GUI.Label(new Rect(30, 130, 300, 30), "Game Speed: " + sSpeed);
+            if (GUI.Button(new Rect(30, 170, 100, 30), "Back"))
+            {
+                checkStart = false;
+            }
+        }
+    }
+}
