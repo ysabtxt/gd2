@@ -1,0 +1,40 @@
+//part of mta_practical
+using UnityEngine;
+
+public class lvl4_bars : MonoBehaviour
+{
+    private MeshRenderer barsRend;
+    private Collider barsCollider;
+    private bool collided;
+
+    void Start()
+    {
+        barsRend = GetComponent<MeshRenderer>();
+        barsCollider = GetComponent<Collider>();
+
+        barsRend.material.color = Color.white;
+        barsCollider.enabled = true;
+    }
+
+    public void BarHit()
+    {
+        if (!collided)
+        {
+            collided = true;
+            barsRend.material.color = Color.green;
+
+            barsCollider.enabled = true;
+        }
+    }
+
+    void Update()
+    {
+        if (collided &&
+            transform.position.y > Camera.main.transform.position.y)
+        {
+            collided = false;
+            barsRend.material.color = Color.white;
+            barsCollider.enabled = true;
+        }
+    }
+}
