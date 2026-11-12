@@ -1,0 +1,65 @@
+// Part of MTA PRACTICAL
+using UnityEngine;
+
+public class FlyingCapsule : MonoBehaviour
+{
+    [SerializeField] float moveSpeed = 5f;
+    [SerializeField] MeshRenderer obstacle;
+    [SerializeField] MeshRenderer otherCapsule;
+    [SerializeField] bool moveRight = true;
+
+    private MeshRenderer capsule;
+    private bool wasColliding;
+
+    void Start()
+    {
+        capsule = GetComponent<MeshRenderer>();
+    }
+
+    void Update()
+    {
+        if (moveRight)
+        {
+            transform.Translate(moveSpeed * Time.deltaTime, 0f, 0f);
+        }
+        else
+        {
+            transform.Translate(-moveSpeed * Time.deltaTime, 0f, 0f);
+        }
+
+        bool isColliding = false;
+
+        if (obstacle != null)
+        {
+            if (capsule.bounds.Intersects(obstacle.bounds))
+            {
+                isColliding = true;
+            }
+        }
+
+        if (otherCapsule != null)
+        {
+            if (capsule.bounds.Intersects(otherCapsule.bounds))
+            {
+                isColliding = true;
+            }
+        }
+
+        if (isColliding)
+        {
+            if (!wasColliding)
+            {
+                if (moveRight)
+                {
+                    moveRight = false;
+                }
+                else
+                {
+                    moveRight = true;
+                }
+            }
+        }
+
+        wasColliding = isColliding;
+    }
+}
