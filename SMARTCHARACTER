@@ -1,0 +1,42 @@
+// moves a character towards another character
+
+using UnityEngine;
+using UnityEngine.TextCore.Text;
+
+public class SmartCharScript : MonoBehaviour
+{
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        GameObject w = GameObject.Find("Wally"); // finds wally in every frame
+        if (Vector3.Distance(transform.position, w.transform.position) < 15) // Checks how far away Wally is
+        // transform.position is the position of the character carrying this script; w.transform.position is Wally’s position; Vector3.Distance(...) measures the distance between them.
+        // pag less than 15 units away si wally, mag run sya
+        {
+            RaycastHit hit; // detects colliders
+            if (Physics.Raycast(transform.position, transform.forward, out hit, 100)) // 100 means yung distance
+            {
+                //Moves toward Wally if the ray hits him
+                if (hit.collider.name == "Wally") {
+                    transform.position = Vector3.MoveTowards(transform.position, w.transform.position, .08f); //.0.8f yung speed
+
+                }
+
+            }
+
+
+        }
+
+
+        Quaternion targetRot= Quaternion.LookRotation(w.transform.position-transform.position); // rotation that FACES that direction
+        // transform.rotation = Quaternion.LookRotation(w.transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, .05f); // smoothly turns the character from its current rotation toward the target rotation.
+
+    }
+}
