@@ -1,0 +1,48 @@
+using UnityEngine;
+
+public class SpawnPoint : MonoBehaviour
+{
+    public static Vector3 lastSP;
+
+    CharacterController playerCont;
+
+    [SerializeField] MeshRenderer SP1_R;
+    [SerializeField] MeshRenderer SP2_R;
+    [SerializeField] MeshRenderer SP3_R;
+
+    void Start()
+    {
+        playerCont = GetComponent<CharacterController>();
+
+        lastSP = transform.position;
+
+        SP1_R.material.color = Color.red;
+        SP2_R.material.color = Color.red;
+        SP3_R.material.color = Color.red;
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.collider.name == "SP1")
+        {
+            lastSP = hit.collider.transform.position;
+            SP1_R.material.color = Color.green;
+        }
+        else if (hit.collider.name == "SP2")
+        {
+            lastSP = hit.collider.transform.position;
+            SP2_R.material.color = Color.green;
+        }
+        else if (hit.collider.name == "SP3")
+        {
+            lastSP = hit.collider.transform.position;
+            SP3_R.material.color = Color.green;
+        }
+        else if (hit.gameObject.name == "SafetyNet")
+        {
+            playerCont.enabled = false;
+            transform.position = lastSP;
+            playerCont.enabled = true;
+        }
+    }
+}
