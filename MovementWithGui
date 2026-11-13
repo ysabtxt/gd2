@@ -1,0 +1,52 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+//Assign Car Movement in the Inspector.
+//Use one damage trigger per hazard, tagged Barrier or SafetyNet. Use the player’s CharacterController as its collider. OnTriggerEnter deducts once per entry.
+//Create a Death Animator trigger and transition. At the end of the Death animation, add an Animation Event calling ShowLose.
+//After Skill 1 successfully destroys the bomb, call gameMenu.WinGame();.
+//In your skill input script, use if (!gameMenu.IsPlaying) return; to prevent attacks before Start and after the game ends.
+
+
+public class CarMovement : MonoBehaviour
+{
+    CharacterController carCont;
+    public bool canMove = false;
+
+    float fallSpeed;
+
+    void Start()
+    {
+        carCont = GetComponent<CharacterController>();
+    }
+
+    void Update()
+    {
+        if (!canMove)
+            return;
+
+        float fb = Keyboard.current.wKey.isPressed ? 1 :
+                   Keyboard.current.sKey.isPressed ? -1 : 0;
+
+        float lr = Keyboard.current.dKey.isPressed ? 1 :
+                   Keyboard.current.aKey.isPressed ? -1 : 0;
+
+        if (canMove && Mouse.current != null)
+        {
+            float rotY = Mouse.current.delta.ReadValue().x;
+            transform.Rotate(0f, rotY, 0f);
+        }
+
+        Vector3 direction =
+            transform.forward * fb + transform.right * lr;
+
+        Vector3 movement = direction.normalized * 8f;
+
+        if (carCont.isGrounded && fallSpeed < 0)
+            fallSpeed = -2f;
+
+        fallSpeed -= 30f * Time.deltaTime;
+        movement.y = fallSpeed;
+
+        carCont.Move(movement * Time.deltaTime);
+    }
+}
