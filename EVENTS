@@ -1,0 +1,63 @@
+using UnityEngine;
+//This script shows Unity’s event methods—methods Unity calls automatically at certain moments, such as when an object starts, updates, or is destroyed.
+
+public class CubeScript : MonoBehaviour
+{
+
+    private void Awake() // cube changes color to green
+    {
+        //GetComponent<MeshRenderer>().material.color = Color.green;
+    }
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start() // cube changes color to yellow
+    {
+        //GetComponent<MeshRenderer>().material.color = Color.yellow;     
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    private void LateUpdate() //	Once every frame, after Update() methods finish
+    {
+        
+    }
+
+    private void FixedUpdate()
+    {
+        
+    }
+    //private void OnDestroy() // runs after the object is destroyed
+    //{
+    //    Camera main = Camera.main;
+    //    main.clearFlags = CameraClearFlags.SolidColor; //tells that camera to use a plain background.
+    //    main.backgroundColor = Color.red;
+    //}
+
+    //private void OnEnable()
+    //{
+    //    Camera main = Camera.main; //switches the main camera to perspective mode
+    //    main.orthographic = false;
+    //}
+
+    //private void OnDisable()
+    //{
+    //    Camera main = Camera.main; //switches the main camera to orthographic mode
+    //    main.orthographic = true;
+    //}
+
+    //private void OnBecameInvisible()
+    //{
+    //    Debug.Log("Invisible");
+    //}
+
+    //private void OnBecameVisible()
+    //{
+    //    Debug.Log("Visible");
+    //}
+
+
+}
