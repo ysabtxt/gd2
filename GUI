@@ -1,0 +1,174 @@
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class GameMenu : MonoBehaviour
+{
+    bool showLevel = false;
+    bool showStory = false;
+    bool gameStarted = false;
+
+    [SerializeField] CarMovement carMovement;
+
+    int health = 100;
+    int laps = 0;
+    int candiesCollected = 0;
+    public TMP_Text lapText;
+    int lapCount = 0;
+
+    void Start()
+    {
+        carMovement.canMove = false;
+    }
+
+    private void OnGUI()
+    {
+        // Show game interface after pressing Ready
+        if (gameStarted)
+        {
+            DrawGameInterface();
+            return;
+        }
+
+        float centerX = Screen.width / 2;
+        float centerY = Screen.height / 2;
+
+        // Main Menu
+        if (!showLevel && !showStory)
+        {
+            GUI.Box(
+                new Rect(centerX - 150, centerY - 100, 300, 200),
+                "CandyRush: Race to Glory"
+            );
+
+            if (GUI.Button(
+                new Rect(centerX - 60, centerY - 50, 120, 30),
+                "Start"))
+            {
+                showLevel = true;
+            }
+
+            if (GUI.Button(
+                new Rect(centerX - 60, centerY, 120, 30),
+                "Story"))
+            {
+                showStory = true;
+            }
+        }
+
+        // Level Screen
+        else if (showLevel)
+        {
+            GUI.Box(
+                new Rect(centerX - 150, centerY - 120, 300, 240),
+                "Level 1"
+            );
+
+            GUI.Label(
+                new Rect(centerX - 120, centerY - 70, 250, 30),
+                "Dodge obstacles"
+            );
+
+            GUI.Label(
+                new Rect(centerX - 120, centerY - 40, 250, 30),
+                "Collect candies"
+            );
+
+            GUI.Label(
+                new Rect(centerX - 120, centerY - 10, 250, 30),
+                "Finish two laps"
+            );
+
+            if (GUI.Button(
+                new Rect(centerX - 60, centerY + 50, 120, 30),
+                "Ready"))
+            {
+                gameStarted = true;
+                carMovement.canMove = true;
+                Debug.Log("Game Started!");
+            }
+
+            if (GUI.Button(
+                new Rect(centerX - 60, centerY + 90, 120, 30),
+                "Back"))
+            {
+                showLevel = false;
+            }
+        }
+
+        // Story Screen
+        else if (showStory)
+        {
+            GUI.Box(
+                new Rect(centerX - 180, centerY - 140, 360, 280),
+                "Story"
+            );
+
+            GUI.Label(
+                new Rect(centerX - 150, centerY - 90, 300, 50),
+                "In the land of CandyRush, a determined racer must reclaim their glory and honor."
+            );
+
+            GUI.Label(
+                new Rect(centerX - 150, centerY - 30, 300, 50),
+                "Dodge obstacles, collect candies, and race to the top!"
+            );
+
+            if (GUI.Button(
+                new Rect(centerX - 60, centerY + 85, 120, 30),
+                "Back"))
+            {
+                showStory = false;
+            }
+        }
+    }
+
+    void DrawGameInterface()
+    {
+
+        GUI.Label(
+            new Rect(40, 30, 200, 25),
+            "Level: 1"
+        );
+
+        GUI.Label(
+            new Rect(40, 45, 200, 25),
+            "Health: " + health
+        );
+
+        GUI.Label(
+            new Rect(750, 30, 200, 25),
+            "Laps: " + laps + " / 2"
+        );
+
+        GUI.Label(
+            new Rect(750, 45, 220, 25),
+            "Candies: " + candiesCollected
+        );
+    }
+
+    public void CollectCandy()
+    {
+        candiesCollected++;
+    }
+
+    public void CompleteLap()
+    {
+        lapCount++;
+
+        lapText.text = "Laps: " + lapCount;
+
+        if (lapCount == 2)
+        {
+            Debug.Log("Stage 2 already");
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+
+        if (health < 0)
+            health = 0;
+    }
+}
