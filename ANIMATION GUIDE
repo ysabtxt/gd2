@@ -1,0 +1,64 @@
+
+
+2 treasure chest -> kailangan mabuksan para mawala yung blue na barrier
+
+pag napunta sa barrier -> knockback tapos less life
+
+para masira yung 2 balls -> kailangan nya tignan para mag bomba 
+
+kailangan masira yung 2 balls para makaakyat sya
+
+skill 2 lang para masira yung pinaka award
+
+
+
+FOR ANIMATION:
+1. lagay model
+2. convert units
+3. rig -> humanoid animation type
+4. animation -> clips 
+
+
+since iba iba yung skill assets
+punta sa inspector assets > characters > rogue
+clips tapos add
+tapos start end depende sa document na binigay
+loop time, pose, bake into pose yxz
+click apply
+makikita animation
+yon ilalagay sa animation controller
+
+
+animator window:
+drag to window si idle
+
+PAG MAY CONDITION WALANG EXIT TIME; PAG WALANG CONDITION MAY EXIT TIME
+idle to walk - fb greater than 0.1
+walk to idle - idle less than 0.1
+
+idle to backwalk- fb less than -0.1
+bwalk to idle- fb greater than -0.1
+
+idle to right - greater than 0.1
+right to idle - less than 0.1
+ 
+idle to left - less than -0.1
+left to idle - greater than -0.1
+
+walk to run : 1 transition; 2 conditions; fb greater than 0.1
+run bool true
+
+run to walk: 2 transitions; 1 condition each; fb less than 1
+takbo is false
+
+
+attack: trigger parameter (no exit time)
+
+death animation: bool 
+chest:
+given na animation
+bool open condition true
+
+
+SA CHARACTER MISMO:
+RIGIDBODY AT CHARACTER CONTROLLER
