@@ -1,0 +1,80 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class charanim : MonoBehaviour
+{
+    Animator playerAnim;
+    bool checkAttack;
+    public static bool open1 = false;
+    public static bool open2 = false;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        playerAnim = GetComponent<Animator>();
+        checkAttack = false;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+      // front and back
+        float fb =
+            Keyboard.current.wKey.ReadValue() > 0 ? 1 :
+            Keyboard.current.sKey.ReadValue() > 0 ? -1 : 0;
+      // left and right
+        float lr =
+            Keyboard.current.dKey.ReadValue() > 0 ? 1 :
+            Keyboard.current.aKey.ReadValue() > 0 ? -1 : 0;
+
+        playerAnim.SetFloat("fb", fb);
+        playerAnim.SetFloat("lr", lr);
+
+        if (Keyboard.current.leftShiftKey.isPressed)
+        {
+            playerAnim.SetBool("Takbo", true); // holds the keyboard
+        }
+        else
+        {
+            playerAnim.SetBool("Takbo", false); // release the keyboard
+        }
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            playerAnim.SetTrigger("sugod");
+        }
+
+        if (Keyboard.current.qKey.isPressed)
+        {
+            playerAnim.SetTrigger("skill2");
+        }
+
+        if (Keyboard.current.eKey.isPressed)
+        {
+            playerAnim.SetTrigger("skill1");
+        }
+
+
+        AnimatorStateInfo playerInfo = playerAnim.GetCurrentAnimatorStateInfo(0); //Checks the current animation state
+
+
+
+        if (playerInfo.IsName("atk2")) // attack animation
+        {
+            checkAttack = true;
+        }
+        else
+        {
+            checkAttack = false;
+        }
+
+        if (open1 == true) //activates open animation of treasure chest
+        {
+            playerAnim.SetBool("open", true);
+        }
+
+    }
+
+    public bool GetAttackInfo() //Lets other scripts check the attack state
+    {
+        return checkAttack;
+    }
+}
