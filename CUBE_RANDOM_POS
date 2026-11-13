@@ -1,0 +1,77 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+//This script gives the cube a random appearance when the game starts,
+//then lets you press S to save its position and color and L to load them.
+
+public class CubeScript : MonoBehaviour
+{
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        transform.position = //This gives the cube a random location
+            new Vector3(Random.Range(-10f, 10f), Random.Range(4f, -4f), 0); // x: horizontal position bet -10 and 10; y: vertical position -4f to 4f; z: stays at 0
+        transform.localScale = new Vector3(Random.Range(1f, 5f), Random.Range(1f, 5f), Random.Range(1f, 5f)); // random cube size; random width, height and depth
+        
+        MeshRenderer cubeRenderer = GetComponent<MeshRenderer>();
+
+        cubeRenderer.material.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+
+        transform.eulerAngles = new Vector3(Random.Range(0, 359), Random.Range(0, 359), Random.Range(0, 359));//This rotates the cube randomly around its X, Y, and Z axes.
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //PlayerPrefs
+        if (Keyboard.current.sKey.wasPressedThisFrame) //saving
+        {
+            /*PlayerPrefs.SetFloat("x", transform.position.x);
+            PlayerPrefs.SetFloat("y", transform.position.y);
+            PlayerPrefs.SetFloat("z", transform.position.z);
+ 
+            PlayerPrefs.SetFloat("a", transform.localScale.x);
+            PlayerPrefs.SetFloat("b", transform.localScale.y);
+            PlayerPrefs.SetFloat("c", transform.localScale.z);*/
+
+            //combines cube's position into text
+            PlayerPrefs.SetString("pos", transform.position.x + "," + transform.position.y + "," + transform.position.z);
+
+            Color col = GetComponent<MeshRenderer>().material.color;
+            PlayerPrefs.SetString("col", col.r + "," + col.g + "," + col.b + "," + col.a);
+        }
+
+        if (Keyboard.current.lKey.wasPressedThisFrame) // loading
+        {
+            //DATA LOADED: POSITION AND COLOR; COMBINED TEXT; CONVERT TEXT TO NUMBERS
+            string posData = PlayerPrefs.GetString("pos"); //Gets the text saved under "pos" and stores it in posData.
+            string[] splitData = posData.Split(',');
+            Vector3 loadData =
+                new Vector3(float.Parse(splitData[0]), float.Parse(splitData[1]), float.Parse(splitData[2])); //float.Parse() changes text into a number
+
+            string colData = PlayerPrefs.GetString("col");
+            string[] splitCol=colData.Split(",");
+            Color col = new Color(float.Parse(splitCol[0]), float.Parse(splitCol[1]), float.Parse(splitCol[2]), float.Parse(splitCol[3])
+
+                );
+            GetComponent<MeshRenderer>().material.color = col;
+
+
+            //DATA LOADED: POSITION AND SIZE; SEPERATE NUM; VALUES ARE ALREADY NUM
+
+            //loads the cube’s saved position and size, then applies them to the cube.
+            /*Vector3 loadData =
+                new Vector3(PlayerPrefs.GetFloat("x"),
+                PlayerPrefs.GetFloat("y"),
+                PlayerPrefs.GetFloat("z"));
+ 
+            //Gets the saved data
+            Vector3 loadLocalScaleData =
+                new Vector3(PlayerPrefs.GetFloat("a"),
+                PlayerPrefs.GetFloat("b"),
+                PlayerPrefs.GetFloat("c"));
+            transform.position = loadData;
+            transform.localScale = loadLocalScaleData;*/
+        }
+    }
+}
