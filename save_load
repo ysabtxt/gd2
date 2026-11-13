@@ -1,0 +1,86 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+using System.Xml.Serialization;
+using System.IO;
+using System.Buffers;
+
+//This script saves and recreates all active objects tagged "Player". It saves their position, size, color, and rotation in a file.
+public class SaveAndLoad2 : MonoBehaviour
+{
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    [SerializeField]
+    GameObject LoadObj;
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        #region save
+        if (Keyboard.current.sKey.wasPressedThisFrame) //saving
+        {
+            GameObject[] player = GameObject.FindGameObjectsWithTag("Player"); //naka tag as player sa inspector
+            TX32[] gd = new TX32[player.Length]; //Finds all active GameObjects tagged "Player" and puts them into an array.
+
+            for (int i = 0; i < player.Length; i++)
+            {
+                gd[i] = new TX32();
+                gd[i].pos = player[i].transform.position;
+                gd[i].scale = player[i].transform.localScale;
+                gd[i].color = player[i].GetComponent<MeshRenderer>().material.color;
+                gd[i].rot = player[i].transform.rotation;
+            }
+
+            //Writes the collected data into a file
+            ////Creates a converter that knows how to turn an array of TX32 data into XML.
+            XmlSerializer saveData = new XmlSerializer(typeof(TX32[])); //isave
+            StreamWriter sw = new StreamWriter("agd.txt"); //// Opens agd.txt for writing. It creates the file if needed and overwrites its previous contents if it already exists.
+            saveData.Serialize(sw, gd); 
+            sw.Close(); //closes the file
+
+
+
+        }
+        #endregion save
+
+        if (Keyboard.current.lKey.wasPressedThisFrame) // Pressing L removes the current Player objects
+        {
+            //Finds the current Player objects and schedules them for destruction. This makes room for the objects recreated from the save.
+            GameObject[] p = GameObject.FindGameObjectsWithTag("Player");
+            for (int i = 0; i < p.Length; i++)
+            {
+                Destroy(p[i]);
+            }
+
+            //Reads the saved file
+            XmlSerializer loadData = new XmlSerializer(typeof(TX32[]));
+            StreamReader sr = new StreamReader("AgD.txt");
+            TX32[] gd = (TX32[]) loadData.Deserialize(sr); // nirereturn ung original data sa file
+
+
+            //Recreates the objects and restores their properties
+            for (int i = 0; i < gd.Length; i++) {
+                GameObject player = Instantiate(LoadObj);
+                player.transform.position = gd[i].pos;
+                player.transform.rotation = gd[i].rot;
+                player.transform.localScale = gd[i].scale;
+                player.GetComponent<MeshRenderer>().material.color = gd[i].color;            
+            
+            }
+            sr.Close();
+
+        }
+    }
+}
+
+public class TX32
+{ //Defines what information gets saved
+    public Vector3 pos;
+    public Vector3 scale;
+    public Color color;
+    public Quaternion rot;
+}
