@@ -1,0 +1,70 @@
+using UnityEngine;
+
+public class ManualObstacleCollision : MonoBehaviour
+{
+    [SerializeField]
+    public Transform playerTrans, obsTrans;
+
+    public Renderer playerRenderer, obsRenderer;
+
+    public float KBDistance = 1;
+
+    private bool Collision = false;
+
+    private float hit;
+   
+
+    private void Update()
+    {
+        bool checkCollision = playerRenderer.bounds.Intersects(obsRenderer.bounds);
+
+        if (checkCollision == true)
+        {
+         
+            if (Collision == false)
+            {
+                hit++;
+
+                // Change the obstacle's color.
+                obsRenderer.material.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+
+
+                // Creates knockback distance between player and obs
+                // forward n backward knockback
+                if (playerTrans.position.z < obsTrans.position.z)
+                {
+                    playerTrans.position -= new Vector3(0f, 0f, 1f);
+                }
+                else
+                {
+                    playerTrans.position += new Vector3(0f, 0f, 1f);
+                }
+
+                //sides knockback
+                if (playerTrans.position.x < obsTrans.position.x)
+                {
+                    playerTrans.position -= new Vector3(1f, 0f, 0f);
+                }
+                else
+                {
+                    playerTrans.position += new Vector3(1f, 0f, 0f);
+                }
+
+               
+                // Destroy obs in third collision
+                if (hit >= 3)
+                {
+                    GameObject obs = GameObject.Find("Obstacle");
+                    Destroy(obs);
+                }
+            }
+
+            Collision = true;
+        }
+        else
+        {
+      
+            Collision = false;
+        }
+    }
+}
