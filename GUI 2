@@ -1,0 +1,84 @@
+using UnityEngine;
+
+public class GameMenu : MonoBehaviour
+{
+    [SerializeField] CarMovement carMovement;
+
+    Animator playerAnim;
+    int health = 3;
+
+    bool gameStarted = false;
+    bool gameEnded = false;
+    string message = "";
+
+    public bool IsPlaying => gameStarted && !gameEnded;
+
+    void Start()
+    {
+        playerAnim = GetComponent<Animator>();
+        carMovement.canMove = false;
+    }
+
+    void OnGUI()
+    {
+        float x = Screen.width / 2f;
+        float y = Screen.height / 2f;
+
+        if (!gameStarted)
+        {
+            if (GUI.Button(new Rect(x - 60, y, 120, 40), "Start"))
+            {
+                gameStarted = true;
+                carMovement.canMove = true;
+            }
+        }
+        else
+        {
+            GUI.Label(new Rect(40, 30, 200, 30), "Life: " + health);
+        }
+
+        if (message != "")
+        {
+            GUI.Box(new Rect(x - 100, y, 200, 60), message);
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Barrier") ||
+            other.CompareTag("SafetyNet"))
+        {
+            TakeDamage();
+        }
+    }
+
+    public void TakeDamage()
+    {
+        if (!IsPlaying)
+            return;
+
+        health--;
+
+        if (health <= 0)
+        {
+            gameEnded = true;
+            carMovement.canMove = false;
+            playerAnim.SetTrigger("Death");
+        }
+    }
+
+    public void ShowLose()
+    {
+        message = "You Lose";
+    }
+
+    public void WinGame()
+    {
+        if (!IsPlaying)
+            return;
+
+        gameEnded = true;
+        carMovement.canMove = false;
+        message = "You Win";
+    }
+}
